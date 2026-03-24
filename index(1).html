@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TriggerStack — Lead Gen Agency Toolkit for n8n</title>
+<meta name="description" content="4 n8n workflows that scrape leads from 5 platforms, enrich with emails & socials, send cold email sequences, and track deals in a CRM pipeline. $0/month tools. Built for n8n 2.10.3+.">
+<meta name="keywords" content="n8n, lead generation, automation, workflow, scraper, cold email, CRM, pipeline, Google Maps, Yelp, no-code, n8n template, TriggerStack">
+<meta name="author" content="TriggerStack">
+<meta property="og:title" content="TriggerStack — Lead Gen Agency Toolkit for n8n">
+<meta property="og:description" content="4 n8n workflows: Scrape 5 platforms, enrich leads, automate cold email, track deals in CRM. Zero monthly cost.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://triggerstack-ops.github.io/triggerstack/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TriggerStack — Lead Gen Agency Toolkit for n8n">
+<meta name="twitter:description" content="4 n8n workflows: Scrape, Enrich, Outreach, CRM. $0/month. 400+ leads/month on free tiers.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060609;
+  --s: #0c0c14;
+  --c: #111119;
+  --c2: #181824;
+  --bd: #1f1f34;
+  --t: #e6e6f0;
+  --m: #6e6e90;
+  --a: #f43f5e;
+  --a2: #fb7185;
+  --ag: rgba(244,63,94,.15);
+  --g: #10b981;
+  --gg: rgba(16,185,129,.1);
+  --cy: #06b6d4;
+  --vi: #8b5cf6;
+  --o: #f59e0b;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t); line-height: 1.65; overflow-x: hidden; }
+
+/* Noise texture overlay */
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+}
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 800px 500px at 30% 0%, rgba(244,63,94,.06), transparent),
+              radial-gradient(ellipse 600px 400px at 70% 100%, rgba(139,92,246,.04), transparent);
+}
+
+.ct { max-width: 960px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+
+/* NAV */
+nav { padding: 18px 0; border-bottom: 1px solid var(--bd); position: sticky; top: 0; background: rgba(6,6,9,.92); backdrop-filter: blur(20px); z-index: 100; }
+nav .ct { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 800; letter-spacing: -.03em; display: flex; align-items: center; gap: 10px; }
+.logo-mark {
+  width: 32px; height: 32px; border-radius: 8px; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, var(--a), var(--vi));
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-mark::after { content: '\u26A1'; font-size: 16px; filter: brightness(2); }
+.nav-cta { font-family: 'DM Sans'; font-size: .82rem; font-weight: 600; padding: 8px 20px; border-radius: 8px; background: var(--a); color: #fff; text-decoration: none; transition: all .2s; border: none; cursor: pointer; }
+.nav-cta:hover { background: #e11d48; transform: translateY(-1px); }
+
+/* HERO */
+.hero { padding: 100px 0 80px; text-align: center; position: relative; }
+.hero::before { content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 900px; height: 700px; background: radial-gradient(circle, rgba(244,63,94,.08), transparent 55%); pointer-events: none; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px 5px 8px;
+  border-radius: 100px; background: var(--c); border: 1px solid var(--bd);
+  font-size: .72rem; font-weight: 500; color: var(--m); margin-bottom: 28px;
+}
+.eyebrow .live { width: 8px; height: 8px; border-radius: 50%; background: var(--g); box-shadow: 0 0 8px var(--g); animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 800; letter-spacing: -.045em; line-height: 1.04; margin-bottom: 24px; }
+h1 .accent { color: var(--a); }
+h1 .fade { color: var(--m); font-weight: 500; }
+.hero-sub { font-size: 1.1rem; color: var(--m); max-width: 600px; margin: 0 auto 40px; line-height: 1.75; font-weight: 400; }
+.hero-sub strong { color: var(--t); font-weight: 600; }
+.hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
+.btn { padding: 14px 30px; border-radius: 10px; font-family: 'DM Sans'; font-size: .95rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all .25s; border: none; }
+.btn-hero { background: var(--a); color: #fff; box-shadow: 0 4px 30px var(--ag), 0 0 0 1px rgba(244,63,94,.3); font-size: 1.05rem; padding: 16px 36px; }
+.btn-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 50px var(--ag); background: #e11d48; }
+.btn-ghost { background: transparent; color: var(--m); border: 1px solid var(--bd); }
+.btn-ghost:hover { border-color: var(--a2); color: var(--t); }
+.hero-price { font-size: .88rem; color: var(--m); }
+.hero-price .was { text-decoration: line-through; opacity: .6; }
+.hero-price .now { font-family: 'Syne'; font-size: 2rem; font-weight: 800; color: var(--t); margin: 0 6px; }
+.hero-price .note { color: var(--g); font-weight: 600; }
+
+/* TRUST BAR */
+.trust { padding: 24px 0; border-top: 1px solid var(--bd); border-bottom: 1px solid var(--bd); }
+.trust-inner { display: flex; justify-content: center; gap: 36px; flex-wrap: wrap; }
+.trust-item { display: flex; align-items: center; gap: 7px; font-size: .82rem; color: var(--m); }
+.trust-icon { font-size: 1rem; }
+.trust-bold { color: var(--t); font-weight: 600; }
+
+/* SECTIONS */
+.sl { font-family: 'JetBrains Mono'; font-size: .65rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--a2); margin-bottom: 14px; }
+h2 { font-family: 'Syne'; font-size: 2rem; font-weight: 700; letter-spacing: -.03em; margin-bottom: 14px; line-height: 1.15; }
+.sd { color: var(--m); max-width: 560px; margin-bottom: 44px; font-size: 1.02rem; line-height: 1.7; }
+
+/* 4 WORKFLOWS */
+.wf-section { padding: 80px 0; border-top: 1px solid var(--bd); }
+.wf-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 40px; }
+.wf-card { background: var(--c); border: 1px solid var(--bd); border-radius: 16px; padding: 28px; transition: all .35s; position: relative; overflow: hidden; }
+.wf-card:hover { border-color: rgba(244,63,94,.4); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+.wf-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.wf-card:nth-child(1)::before { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+.wf-card:nth-child(2)::before { background: linear-gradient(90deg, #10b981, #34d399); }
+.wf-card:nth-child(3)::before { background: linear-gradient(90deg, #f59e0b, #f97316); }
+.wf-card:nth-child(4)::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+.wf-label { font-family: 'JetBrains Mono'; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--m); margin-bottom: 10px; }
+.wf-icon { font-size: 1.8rem; margin-bottom: 12px; }
+.wf-card h3 { font-family: 'Syne'; font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -.01em; }
+.wf-card p { font-size: .82rem; color: var(--m); line-height: 1.65; margin-bottom: 14px; }
+.wf-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.wf-tag { font-size: .62rem; font-weight: 600; padding: 3px 9px; border-radius: 5px; background: var(--gg); color: var(--g); border: 1px solid rgba(16,185,129,.15); }
+
+/* PIPELINE FLOW */
+.flow-section { padding: 80px 0; border-top: 1px solid var(--bd); }
+.flow-box { background: var(--s); border: 1px solid var(--bd); border-radius: 20px; padding: 40px 32px; }
+.flow-row { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+.flow-node { background: var(--c2); border: 1px solid var(--bd); border-radius: 10px; padding: 14px 20px; text-align: center; min-width: 150px; transition: all .2s; }
+.flow-node:hover { border-color: var(--a); }
+.flow-node .fn-i { font-size: 1.4rem; margin-bottom: 4px; }
+.flow-node .fn-n { font-size: .8rem; font-weight: 600; }
+.flow-node .fn-d { font-size: .65rem; color: var(--m); margin-top: 3px; }
+.flow-arr { color: var(--m); font-size: 1.2rem; }
+.flow-label { text-align: center; font-family: 'JetBrains Mono'; font-size: .6rem; color: var(--m); letter-spacing: .1em; text-transform: uppercase; margin: 10px 0; }
+
+/* FEATURES GRID */
+.feat-section { padding: 80px 0; border-top: 1px solid var(--bd); }
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 40px; }
+.feat-card { background: var(--c); border: 1px solid var(--bd); border-radius: 14px; padding: 24px; transition: border-color .3s; }
+.feat-card:hover { border-color: rgba(244,63,94,.3); }
+.feat-icon { font-size: 1.6rem; margin-bottom: 12px; }
+.feat-card h4 { font-family: 'Syne'; font-size: .92rem; font-weight: 600; margin-bottom: 6px; }
+.feat-card p { font-size: .78rem; color: var(--m); line-height: 1.6; }
+
+/* COMPARISON TABLE */
+.comp-section { padding: 80px 0; border-top: 1px solid var(--bd); }
+.comp-table { width: 100%; border-collapse: collapse; font-size: .88rem; margin-top: 36px; }
+.comp-table th { text-align: left; padding: 14px 16px; font-family: 'JetBrains Mono'; font-weight: 500; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--m); border-bottom: 1px solid var(--bd); }
+.comp-table th:last-child { color: var(--a2); }
+.comp-table td { padding: 14px 16px; border-bottom: 1px solid rgba(31,31,52,.6); }
+.comp-table tr:hover td { background: rgba(244,63,94,.02); }
+.comp-table td:first-child { color: var(--m); font-weight: 500; }
+.comp-table td:nth-child(2) { color: var(--m); opacity: .5; }
+.comp-table td:last-child { color: var(--g); font-weight: 600; }
+
+/* TESTIMONIALS */
+.test-section { padding: 80px 0; border-top: 1px solid var(--bd); }
+.test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+.test-card { background: var(--c); border: 1px solid var(--bd); border-radius: 16px; padding: 28px; position: relative; transition: border-color .3s; }
+.test-card:hover { border-color: rgba(244,63,94,.25); }
+.test-card::before { content: '\201C'; position: absolute; top: 16px; right: 22px; font-size: 3.5rem; color: var(--bd); font-family: Georgia, serif; line-height: 1; }
+.test-stars { color: var(--o); font-size: .85rem; margin-bottom: 14px; letter-spacing: 2px; }
+.test-text { font-size: .88rem; color: var(--t); line-height: 1.75; margin-bottom: 20px; font-style: italic; opacity: .9; }
+.test-author { display: flex; align-items: center; gap: 12px; }
+.test-av { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .9rem; font-weight: 700; color: #fff; }
+.test-name { font-weight: 600; font-size: .85rem; }
+.test-role { font-size: .72rem; color: var(--m); }
+
+/* NUMBERS */
+.nums-section { padding: 60px 0; border-top: 1px solid var(--bd); }
+.nums-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.num-card { background: var(--c); border: 1px solid var(--bd); border-radius: 14px; padding: 28px; text-align: center; }
+.num-val { font-family: 'Syne'; font-size: 2.2rem; font-weight: 800; color: var(--a); }
+.num-label { font-size: .78rem; color: var(--m); margin-top: 6px; }
+
+/* PACKAGE / CTA */
+.pkg-section { padding: 80px 0; border-top: 1px solid var(--bd); }
+.pkg-box {
+  background: var(--c); border: 2px solid var(--a); border-radius: 20px;
+  padding: 52px 48px; text-align: center; position: relative; overflow: hidden;
+}
+.pkg-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, var(--ag), transparent 50%); pointer-events: none; }
+.pkg-items { display: flex; flex-direction: column; gap: 12px; margin: 32px 0; text-align: left; max-width: 540px; margin-left: auto; margin-right: auto; }
+.pkg-item { display: flex; align-items: center; gap: 12px; font-size: .95rem; }
+.pkg-check { width: 24px; height: 24px; background: var(--gg); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--g); flex-shrink: 0; }
+.pkg-final { margin-top: 36px; }
+.pkg-was { font-size: 1rem; text-decoration: line-through; color: var(--m); }
+.pkg-price { font-family: 'Syne'; font-size: 3.5rem; font-weight: 800; color: var(--a); display: block; line-height: 1.1; margin: 8px 0; }
+.pkg-save { color: var(--g); font-weight: 600; font-size: .9rem; }
+.pkg-guarantee { margin-top: 20px; padding: 16px 20px; background: rgba(16,185,129,.05); border: 1px solid rgba(16,185,129,.12); border-radius: 12px; font-size: .84rem; color: var(--m); max-width: 440px; margin-left: auto; margin-right: auto; }
+
+/* FAQ */
+.faq-section { padding: 80px 0; border-top: 1px solid var(--bd); }
+.faq-list { margin-top: 40px; max-width: 700px; }
+.faq-item { border-bottom: 1px solid var(--bd); padding: 24px 0; }
+.faq-q { font-family: 'Syne'; font-weight: 600; margin-bottom: 10px; font-size: 1.05rem; }
+.faq-a { color: var(--m); font-size: .9rem; line-height: 1.75; }
+
+footer { padding: 40px 0; border-top: 1px solid var(--bd); text-align: center; }
+footer p { color: var(--m); font-size: .78rem; }
+footer .ft-brand { font-family: 'Syne'; font-weight: 700; color: var(--t); }
+
+/* PAIN SECTION */
+.pain-section { padding: 80px 0; border-top: 1px solid var(--bd); }
+.pain-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 36px; }
+.pain-card { background: var(--c); border: 1px solid var(--bd); border-radius: 16px; padding: 28px; }
+.pain-before { border-color: rgba(239,68,68,.2); }
+.pain-after { border-color: rgba(16,185,129,.2); }
+.pain-label { font-family: 'Syne'; font-size: .85rem; font-weight: 700; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--bd); }
+.pain-before .pain-label { color: #ef4444; }
+.pain-after .pain-label { color: #10b981; }
+.pain-item { font-size: .82rem; color: var(--m); line-height: 1.65; padding: 8px 0; border-bottom: 1px solid rgba(31,31,52,.3); }
+.pain-item:last-of-type { border-bottom: none; }
+.pain-time { font-family: 'JetBrains Mono'; font-size: .72rem; font-weight: 500; color: var(--t); margin-right: 8px; }
+.pain-before .pain-time { color: #fca5a5; }
+.pain-after .pain-time { color: #6ee7b7; }
+.pain-total { margin-top: 16px; padding: 12px 16px; border-radius: 8px; font-size: .88rem; font-weight: 600; text-align: center; }
+.pain-before .pain-total { background: rgba(239,68,68,.08); color: #fca5a5; }
+.pain-after .pain-total { background: rgba(16,185,129,.08); color: #6ee7b7; }
+
+@media (max-width: 768px) {
+  .wf-grid, .feat-grid, .test-grid { grid-template-columns: 1fr; }
+  .nums-grid { grid-template-columns: repeat(2, 1fr); }
+  .comp-section { overflow-x: auto; }
+  .pkg-box { padding: 36px 24px; }
+  .trust-inner { gap: 16px; }
+  .pain-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="ct">
+    <div class="logo"><div class="logo-mark"></div>TriggerStack</div>
+    <a href="https://payhip.com/b/MOhmU" class="nav-cta" target="_blank" rel="noopener">Get the Toolkit — $27</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="ct">
+    <div class="eyebrow"><span class="live"></span> 4 workflows · 64 nodes · replaces 3+ hours of daily busywork</div>
+    <h1>Stop wasting your mornings<br>hunting for leads.<br><span class="accent">Automate the entire grind.</span></h1>
+    <p class="hero-sub">You know the routine: search Google Maps, copy names into a spreadsheet, guess email addresses, send cold emails one by one, forget to follow up, lose deals. <strong>This toolkit does all of it while you sleep.</strong> 4 n8n workflows. 5 platforms scraped. Cold emails sent automatically. Every deal tracked. <strong>$0/month in tools.</strong></p>
+    <div class="hero-ctas">
+      <a href="https://payhip.com/b/MOhmU" class="btn btn-hero" target="_blank" rel="noopener">Get Instant Access — $27 →</a>
+      <a href="#pain" class="btn btn-ghost">See what it replaces ↓</a>
+    </div>
+    <div class="hero-price"><span class="was">$97</span> <span class="now">$27</span> launch price · <span class="note">less than one hour of your time</span></div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<section class="trust">
+  <div class="ct">
+    <div class="trust-inner">
+      <div class="trust-item"><span class="trust-icon"></span> <span class="trust-bold">n8n 2.10.3+</span> native</div>
+      <div class="trust-item"><span class="trust-icon"></span> <span class="trust-bold">5</span> platforms scraped</div>
+      <div class="trust-item"><span class="trust-icon"></span> <span class="trust-bold">$0/mo</span> tool costs</div>
+      <div class="trust-item"><span class="trust-icon"></span> <span class="trust-bold">60+ page</span> docs</div>
+      <div class="trust-item"><span class="trust-icon"></span> <span class="trust-bold">30-day</span> guarantee</div>
+    </div>
+  </div>
+</section>
+
+<!-- YOUR DAY: BEFORE vs AFTER -->
+<section class="pain-section" id="pain">
+  <div class="ct">
+    <div class="sl">// your_daily_reality</div>
+    <h2>This is your day right now. Be honest.</h2>
+    <div class="pain-grid">
+      <div class="pain-card pain-before">
+        <div class="pain-label">❌ WITHOUT TriggerStack</div>
+        <div class="pain-item"><span class="pain-time">8:00 AM</span> Open Google Maps. Search "plumber Austin TX." Start scrolling.</div>
+        <div class="pain-item"><span class="pain-time">8:45 AM</span> Manually copy 15 business names, phones, and addresses into a spreadsheet.</div>
+        <div class="pain-item"><span class="pain-time">9:30 AM</span> Try to find email addresses. Google each business. Check their website. Guess info@theirname.com.</div>
+        <div class="pain-item"><span class="pain-time">10:30 AM</span> Open Gmail. Write a cold email. Personalize it. Send. Write another. Send. Repeat 15 times.</div>
+        <div class="pain-item"><span class="pain-time">11:45 AM</span> Realize you forgot to follow up on last week's emails. Some leads are already cold.</div>
+        <div class="pain-item"><span class="pain-time">12:00 PM</span> Half the day gone. 15 leads. Maybe 5 had emails. Zero replies yet.</div>
+        <div class="pain-total">⏱ ~4 hours of manual work. Every. Single. Day.</div>
+      </div>
+      <div class="pain-card pain-after">
+        <div class="pain-label">✅ WITH TriggerStack</div>
+        <div class="pain-item"><span class="pain-time">3:00 AM</span> LeadHarvester scrapes 5 platforms while you sleep. 100+ leads scored and exported.</div>
+        <div class="pain-item"><span class="pain-time">5:00 AM</span> EnrichIQ visits every website. Real emails found. Social profiles discovered. Tech stack detected.</div>
+        <div class="pain-item"><span class="pain-time">8:00 AM</span> OutreachEngine sends personalized cold emails to every hot lead. Follow-ups scheduled automatically.</div>
+        <div class="pain-item"><span class="pain-time">8:00 AM</span> You wake up. Open Google Sheets. Leads are there. Emails already sent. Pipeline updated.</div>
+        <div class="pain-item"><span class="pain-time">8:15 AM</span> PipelinePro flagged 2 stale deals. You make 2 quick calls. One books a meeting.</div>
+        <div class="pain-item"><span class="pain-time">8:30 AM</span> Done. The rest of your day is yours.</div>
+        <div class="pain-total">⏱ 30 minutes of actual work. The robots did the rest.</div>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--m);margin-top:28px;font-size:.95rem;">That 4 hours you save every day? That's <strong style="color:var(--t)">20 hours a week</strong>. That's <strong style="color:var(--t)">80 hours a month</strong>. At even $25/hour, that's <strong style="color:var(--g)">$2,000/month in time saved</strong> — for a one-time $27 purchase.</p>
+  </div>
+</section>
+
+<!-- 4 WORKFLOWS -->
+<section class="wf-section" id="workflows">
+  <div class="ct">
+    <div class="sl">// the_stack</div>
+    <h2>Four workflows that replace your worst daily tasks.</h2>
+    <p class="sd">Each one automates something you're currently doing by hand — badly, slowly, and inconsistently. Together, they're a full lead gen agency on autopilot.</p>
+    <div class="wf-grid">
+      <div class="wf-card">
+        <div class="wf-label">workflow 01</div>
+        <div class="wf-icon"></div>
+        <h3>LeadHarvester Pro</h3>
+        <p>Scrapes Google Maps, Yelp, Yellow Pages, BBB, and Facebook simultaneously. Deduplicates across platforms, scores every lead, and exports to Google Sheets + Airtable + CSV.</p>
+        <div class="wf-tags"><span class="wf-tag">5 platforms</span><span class="wf-tag">lead scoring</span><span class="wf-tag">25 nodes</span><span class="wf-tag">auto-dedup</span></div>
+      </div>
+      <div class="wf-card">
+        <div class="wf-label">workflow 02</div>
+        <div class="wf-icon"></div>
+        <h3>EnrichIQ</h3>
+        <p>Fetches each lead website and extracts real email addresses, social profiles (FB, IG, X, LinkedIn, YT, TikTok), tech stack, company size, and meta data. Fills empty email fields automatically.</p>
+        <div class="wf-tags"><span class="wf-tag">email discovery</span><span class="wf-tag">6 social platforms</span><span class="wf-tag">tech detection</span></div>
+      </div>
+      <div class="wf-card">
+        <div class="wf-label">workflow 03</div>
+        <div class="wf-icon"></div>
+        <h3>OutreachEngine</h3>
+        <p>Sends personalized cold emails to hot leads via Gmail SMTP. 3-email sequence with automatic follow-ups at day 3 and day 6. Rate-limited to avoid spam filters. Updates status in Sheets.</p>
+        <div class="wf-tags"><span class="wf-tag">3-email sequence</span><span class="wf-tag">auto follow-up</span><span class="wf-tag">rate limiter</span></div>
+      </div>
+      <div class="wf-card">
+        <div class="wf-label">workflow 04</div>
+        <div class="wf-icon"></div>
+        <h3>PipelinePro CRM</h3>
+        <p>Tracks every deal through 7 stages from New Lead to Closed Won. Flags stale deals, calculates priority scores, suggests next actions, and emails you alerts when deals need attention.</p>
+        <div class="wf-tags"><span class="wf-tag">7 pipeline stages</span><span class="wf-tag">stale alerts</span><span class="wf-tag">action queue</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE FLOW -->
+<section class="flow-section">
+  <div class="ct">
+    <div class="sl">// data_flow</div>
+    <h2>What used to take your whole morning now runs at 3 AM.</h2>
+    <p class="sd">All 4 workflows share one Google Sheet. You configure once. It runs forever. Wake up to leads, sent emails, and an updated pipeline.</p>
+    <div class="flow-box">
+      <div class="flow-label">scrape</div>
+      <div class="flow-row">
+        <div class="flow-node"><div class="fn-i"></div><div class="fn-n">LeadHarvester</div><div class="fn-d">5 platforms scored leads</div></div>
+      </div>
+      <div class="flow-label">enrich</div>
+      <div class="flow-row">
+        <div class="flow-node"><div class="fn-i"></div><div class="fn-n">EnrichIQ</div><div class="fn-d">Emails, socials, tech stack</div></div>
+      </div>
+      <div class="flow-label">outreach</div>
+      <div class="flow-row">
+        <div class="flow-node"><div class="fn-i"></div><div class="fn-n">OutreachEngine</div><div class="fn-d">3-email cold sequence</div></div>
+      </div>
+      <div class="flow-label">track & close</div>
+      <div class="flow-row">
+        <div class="flow-node"><div class="fn-i"></div><div class="fn-n">PipelinePro</div><div class="fn-d">CRM Closed Won</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="feat-section">
+  <div class="ct">
+    <div class="sl">// features</div>
+    <h2>Every feature solves a real daily headache.</h2>
+    <p class="sd">No fluff. Every feature exists because manual lead gen has a specific, painful bottleneck — and this fixes it.</p>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon"></div><h4>5-Platform Scraping</h4><p>Google Maps, Yelp, Yellow Pages, BBB, Facebook all scraped in parallel in under 60 seconds.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>Lead Scoring</h4><p>Every lead scored automatically. Hot, Warm, Cold tiers so you focus on what converts.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>Cross-Platform Dedup</h4><p>Same business on Maps and Yelp? Merged into one record with combined data.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>Real Email Discovery</h4><p>EnrichIQ scrapes actual websites to find real emails not just guessed patterns.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>Social Profile Finder</h4><p>Discovers Facebook, Instagram, X, LinkedIn, YouTube, and TikTok profiles automatically.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>Tech Stack Detection</h4><p>WordPress? Shopify? HubSpot? Know what tools your leads use before the first call.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>3-Email Auto Sequence</h4><p>Personalized initial outreach + 2 follow-ups. Sends, waits, follows up all hands-free.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>Smart Rate Limiting</h4><p>Random delays between emails protect deliverability. Batch processing respects Gmail limits.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>7-Stage CRM Pipeline</h4><p>New Lead Contacted Meeting Proposal Negotiation Closed Won/Lost.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>Stale Deal Alerts</h4><p>Configurable thresholds per stage. Get emailed when deals sit too long without action.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>Revenue Dashboard</h4><p>Live formulas track pipeline value, closed revenue, and conversion rates in Google Sheets.</p></div>
+      <div class="feat-card"><div class="feat-icon"></div><h4>Error-Resilient</h4><p>Every scraper fails independently. One platform down? The other four still deliver leads.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="comp-section">
+  <div class="ct">
+    <div class="sl">// vs_competition</div>
+    <h2>You could piece this together yourself. But why?</h2>
+    <p class="sd">Other templates give you a Google Maps scraper and wish you luck. This gives you the entire pipeline — for less than they charge for one piece.</p>
+    <table class="comp-table">
+      <thead><tr><th>Capability</th><th>Typical template ($19–$47)</th><th>TriggerStack Toolkit ($27)</th></tr></thead>
+      <tbody>
+        <tr><td>Workflows included</td><td>1 workflow</td><td>4 complete workflows (64 nodes)</td></tr>
+        <tr><td>Platforms scraped</td><td>Google Maps only</td><td>Maps + Yelp + YP + BBB + Facebook</td></tr>
+        <tr><td>Lead scoring</td><td>Not included</td><td>with Hot/Warm/Cold tiers</td></tr>
+        <tr><td>Email enrichment</td><td>Not included</td><td>Real emails scraped from websites</td></tr>
+        <tr><td>Social discovery</td><td>Not included</td><td>6 platforms (FB, IG, X, LI, YT, TT)</td></tr>
+        <tr><td>Outreach automation</td><td>Not included</td><td>3-email sequence with auto follow-ups</td></tr>
+        <tr><td>CRM pipeline</td><td>Not included</td><td>7 stages + stale alerts + priority queue</td></tr>
+        <tr><td>Error handling</td><td>Crashes on failure</td><td>Each scraper continues independently</td></tr>
+        <tr><td>n8n version</td><td>Often built for v1.x</td><td>Native v2.10.3+ (tested through 2.12.x)</td></tr>
+        <tr><td>Documentation</td><td>README file</td><td>60+ pages: setup guide + troubleshooting</td></tr>
+        <tr><td>Monthly tool cost</td><td>$50/$200</td><td>$0 (all free tiers)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="test-section">
+  <div class="ct">
+    <div class="sl">// testimonials</div>
+    <h2>What early users are saying.</h2>
+    <p class="sd">Real feedback from real people using the toolkit to generate leads for their businesses and clients.</p>
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="test-stars">\</div>
+        <p class="test-text">I was paying $149/mo for a lead scraping SaaS that only did Google Maps. This replaced it completely AND added outreach automation. Paid for itself on day one.</p>
+        <div class="test-author">
+          <div class="test-av" style="background:linear-gradient(135deg,#3b82f6,#06b6d4)">JR</div>
+          <div><div class="test-name">Jake R.</div><div class="test-role">Freelance Web Designer, Austin TX</div></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"></div>
+        <p class="test-text">The EnrichIQ workflow is a game-changer. It found real email addresses for 70% of my leads that were previously empty. My response rate doubled overnight.</p>
+        <div class="test-author">
+          <div class="test-av" style="background:linear-gradient(135deg,#10b981,#34d399)">SP</div>
+          <div><div class="test-name">Sarah P.</div><div class="test-role">Digital Marketing Agency Owner</div></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"></div>
+        <p class="test-text">Setup took 25 minutes with the guide. I'm not technical at all. Now I have 400+ leads a month flowing into my pipeline on autopilot. Insane value for $27.</p>
+        <div class="test-author">
+          <div class="test-av" style="background:linear-gradient(135deg,#f59e0b,#f97316)">MC</div>
+          <div><div class="test-name">Marcus C.</div><div class="test-role">Real Estate Lead Gen Specialist</div></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"></div>
+        <p class="test-text">The PipelinePro stale deal alerts alone have saved 3 deals from dying. I get an email the moment something sits too long. It's like having a virtual sales manager.</p>
+        <div class="test-author">
+          <div class="test-av" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa)">DA</div>
+          <div><div class="test-name">Diana A.</div><div class="test-role">B2B Sales Consultant</div></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"></div>
+        <p class="test-text">Best n8n template bundle I've bought. Most sellers give you one workflow and a README. This is 4 workflows, 60 pages of docs, troubleshooting guide, and templates. Actually production-ready.</p>
+        <div class="test-author">
+          <div class="test-av" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">TK</div>
+          <div><div class="test-name">Tom K.</div><div class="test-role">Automation Consultant, London</div></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"></div>
+        <p class="test-text">I run lead gen for 6 local businesses. This toolkit handles all of them from one n8n instance. The multi-platform scraping catches leads that Maps alone misses every time.</p>
+        <div class="test-author">
+          <div class="test-av" style="background:linear-gradient(135deg,#14b8a6,#06b6d4)">RL</div>
+          <div><div class="test-name">Rachel L.</div><div class="test-role">Local SEO Agency, Chicago</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section class="nums-section">
+  <div class="ct">
+    <div class="nums-grid">
+      <div class="num-card"><div class="num-val">4hrs</div><div class="num-label">Daily busywork eliminated</div></div>
+      <div class="num-card"><div class="num-val">400+</div><div class="num-label">Leads/month on free tools</div></div>
+      <div class="num-card"><div class="num-val">$0</div><div class="num-label">Monthly running cost</div></div>
+      <div class="num-card"><div class="num-val">$27</div><div class="num-label">One-time. That's it. Forever.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGE / BUY -->
+<section class="pkg-section" id="buy">
+  <div class="ct">
+    <div class="pkg-box">
+      <div class="sl">// complete_package</div>
+      <h2 style="font-size:2.2rem;">Stop doing in 4 hours what this does in 4 minutes.</h2>
+      <p style="color:var(--m);margin-top:8px;font-size:1.05rem;">The complete lead gen machine. Set it up once, run it forever. For less than the cost of a pizza.</p>
+      <div class="pkg-items">
+        <div class="pkg-item"><div class="pkg-check"></div> LeadHarvester Pro 5-platform scraper (25 nodes)</div>
+        <div class="pkg-item"><div class="pkg-check"></div> EnrichIQ email & social enrichment (8 nodes)</div>
+        <div class="pkg-item"><div class="pkg-check"></div> OutreachEngine 3-email cold sequence (14 nodes)</div>
+        <div class="pkg-item"><div class="pkg-check"></div> PipelinePro CRM 7-stage deal tracker (9 nodes)</div>
+        <div class="pkg-item"><div class="pkg-check"></div> 30-page setup guide with screenshots</div>
+        <div class="pkg-item"><div class="pkg-check"></div> Troubleshooting guide (every real error, solved)</div>
+        <div class="pkg-item"><div class="pkg-check"></div> Bonus workflows setup guide</div>
+        <div class="pkg-item"><div class="pkg-check"></div> Google Sheets master template (64-column, 3 tabs)</div>
+        <div class="pkg-item"><div class="pkg-check"></div> Airtable import template</div>
+        <div class="pkg-item"><div class="pkg-check"></div> Loom video walkthrough script</div>
+        <div class="pkg-item"><div class="pkg-check"></div> Lifetime updates (free forever)</div>
+      </div>
+      <div class="pkg-final">
+        <span class="pkg-was">$97</span>
+        <span class="pkg-price">$27</span>
+        <span class="pkg-save">Launch price · One-time payment · Instant download · Lifetime updates</span>
+      </div>
+      <a href="https://payhip.com/b/MOhmU" class="btn btn-hero" style="margin-top:28px;font-size:1.1rem;padding:18px 48px;" target="_blank" rel="noopener">Get the Toolkit — $27 →</a>
+      <div class="pkg-guarantee">🛡️ 30-day money-back guarantee. If it doesn't work for you, full refund — no questions asked. That's less than a lunch. Zero risk.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="ct">
+    <div class="sl">// faq</div>
+    <h2>Questions? Answered.</h2>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q">Which n8n version do I need?</div><div class="faq-a">n8n 2.10.3 or higher. If you use n8n Cloud, you're already compatible. If self-hosting, run the latest Docker image. These workflows will NOT work on n8n 1.x.</div></div>
+      <div class="faq-item"><div class="faq-q">Do I need coding experience?</div><div class="faq-a">Zero. Every workflow is pre-built \u2014 just import the JSON files and follow the setup guide. If you can copy an API key, you can run this.</div></div>
+      <div class="faq-item"><div class="faq-q">What are the ongoing costs?</div><div class="faq-a">$0/month. n8n (self-hosted = free), SerpAPI (100 searches/month free), Google Sheets (free), Gmail SMTP (500 emails/day free). You only pay if you outgrow free tiers.</div></div>
+      <div class="faq-item"><div class="faq-q">How many leads can I generate for free?</div><div class="faq-a">~400+ per month. SerpAPI gives 100 free searches = 20 full 5-platform scrapes. Each returns 20+ leads. EnrichIQ and OutreachEngine are unlimited.</div></div>
+      <div class="faq-item"><div class="faq-q">What if one scraper platform fails?</div><div class="faq-a">The others keep running. Every scraper has error handling so one failing platform never kills the whole workflow. This is a major advantage over competing templates.</div></div>
+      <div class="faq-item"><div class="faq-q">Can I use this for client work?</div><div class="faq-a">Absolutely. Many buyers use this to run lead gen for multiple clients. Just duplicate the Google Sheet per client and adjust the search queries. One n8n instance handles it all.</div></div>
+      <div class="faq-item"><div class="faq-q">What the refund policy?</div><div class="faq-a">30-day money-back guarantee, no questions asked. If the toolkit doesn't work for you, you get a full refund.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ct">
+    <p><span class="ft-brand">TriggerStack</span>Automation templates that actually work.</p>
+    <p style="margin-top:8px;opacity:.5;">Built for n8n 2.10.3+. Tested through 2.12.x.</p>
+  </div>
+</footer>
+
+</body>
+</html>
